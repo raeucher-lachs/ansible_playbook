@@ -4,4 +4,4 @@
   tasks:
     - name: Verzeichnis erstellt.
       ansible.builtin.shell:
-        cmd: mkdir /home/homa/moodle
+        cmd: mkdir /home/homa/moodle # Pfad für das Moodle-Repository
