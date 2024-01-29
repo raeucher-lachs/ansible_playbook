@@ -1,9 +1,9 @@
 ---
-- name: Moodle Verzeichnis wird erstellt
-  moodlepath: /home/{{ ansible_user }}/moodle
+- name: Erstelle Verzeichnis Moodle.
   hosts: ansible-moodle # Ansible-Hosts (Ziel für die Erstellung + Download)
+  vars:
+    moodlepath: /home/{{ ansible_user }}/moodle
   tasks:
-    - name: Verzeichnis erstellt.
       ansible.builtin.shell:
         cmd: mkdir '{{ moodlepath }}' # Pfad für das Moodle-Repository
   tasks:
