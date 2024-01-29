@@ -1,0 +1,40 @@
+---
+- name: Halte Debian auf den neusten Stand.
+  hosts: ansible-moodle # Ansible-Hosts
+  tasks:
+        - name: Aktiviere Module
+          ansible.builtin.shell:
+            cmd: sudo a2enmod userdir
+    tasks:
+        - name: Konfiguiere Apache Module (userdir.conf)
+          ansible.builtin.blockinfile:
+            path: /etc/apache2/mods-enabled/userdir.conf
+            block: |
+              <IfModule mod_userdir.c>
+                  UserDir public_html
+                  UserDir disabled root
+  
+                  <Directory /home/*/public_html>
+                          AllowOverride All
+                          Options MultiViews Indexes SymLinksIfOwnerMatch
+                          <Limit GET POST OPTIONS>
+                                  Order allow,deny
+                                  Allow from all
+                          </Limit>
+                          <LimitExcept GET POST OPTIONS>
+                                  Order deny,allow
+                                  Deny from all
+                          </LimitExcept>
+                  </Directory>
+              </IfModule>
+    tasks:
+        - name: Erstelle Web-Verzeichnis für Moodle und ändere Rechte
+          ansible.builtin.shell:
+            cmd: sudo mkdir /var/www/moodle
+            cmd: sudo chgrp www-data /var/www/moodle
+            cmd: sudo chmod 755 /var/www/moodle
+    tasks:
+        - name: Starte Apapche-Service neu
+          ansible.builtin.shell:
+            cmd: sudo service apache2 restart
+        
