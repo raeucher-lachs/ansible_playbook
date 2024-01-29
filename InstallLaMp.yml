@@ -1,11 +1,9 @@
 ---
-- name: Halte Debian auf den neusten Stand.
+- name: Installier LaMp.
   hosts: ansible-moodle # Ansible-Hosts
   tasks:
       ansible.builtin.shell:
         cmd: sudo apt update && apt upgrade -y
-      - name: Installiere MariaDB
         cmd: sudo apt install mariadb-server mariadb-client -y
-      - name: Installiere Apache2
         cmd: sudo apt install apache2 apache2-doc -y
   
