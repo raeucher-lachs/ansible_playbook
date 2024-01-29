@@ -1,5 +1,6 @@
 - hosts: ansible-moodle
   tasks:
+  - name: Erstelle Moodle Verzeichnis.
   ansible.builtin.file:
     path: /home/{{ ansible_user }}/moodle
     state: directory
