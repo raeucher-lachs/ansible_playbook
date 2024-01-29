@@ -10,6 +10,6 @@
     - name: Klone Moodle von Git.
       ansible.builtin.git:
         repo: https://github.com/moodle/moodle.git
-        name: MOODLE_403_STABLE
+        version: MOODLE_403_STABLE
         dest: /home/{{ ansible_user }}/moodle # Ziel Ordner
         clone: yes
