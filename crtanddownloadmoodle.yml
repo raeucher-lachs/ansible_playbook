@@ -1,15 +1,15 @@
 ---
 - name: Moodle Verzeichnis wird erstellt
-  hosts: ansible-moodle
+  moodlepath: /home/{{ ansible_user }}/moodle
+  hosts: ansible-moodle # Ansible-Hosts (Ziel für die Erstellung + Download)
   tasks:
     - name: Verzeichnis erstellt.
       ansible.builtin.shell:
-        cmd: mkdir /home/{{ ansible_user }}/moodle # Pfad für das Moodle-Repository
-
+        cmd: mkdir '{{ moodlepath }}' # Pfad für das Moodle-Repository
   tasks:
     - name: Klone Moodle von Git.
       ansible.builtin.git:
         repo: https://github.com/moodle/moodle.git
         version: MOODLE_403_STABLE
-        dest: /home/{{ ansible_user }}/moodle # Ziel Ordner
+        dest: '{{ moodlepath }}' # Ziel Ordner
         clone: yes
