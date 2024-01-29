@@ -1,5 +1,7 @@
 ---
+- name: Moodle Verzeichnis wird erstellt
 - hosts: ansible-moodle
-- name: Erstelle Verzeichnis moodle
+tasks:
+  - name: Verzeichnis erstellt.
   ansible.builtin.shell:
     cmd: mkdir /home/homa/moodle
