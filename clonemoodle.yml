@@ -3,5 +3,5 @@
   - name: Klone Moodle von Git.
     ansible.builtin.git:
       repo: https://github.com/moodle/moodle.git
-      dest: dest: /home/{{ ansible_user }}/ # Ziel Ordner
+      dest: /home/"{{ ansible_user }}"/ # Ziel Ordner
       clone: yes
