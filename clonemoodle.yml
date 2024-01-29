@@ -4,8 +4,10 @@
   ansible.builtin.file:
     path: /home/{{ ansible_user }}/moodle
     state: directory
+- hosts: ansible-moodle
+  tasks:
   - name: Klone Moodle von Git.
-    ansible.builtin.git:
-      repo: https://github.com/moodle/moodle.git
-      dest: /home/{{ ansible_user }}/moodle # Ziel Ordner
-      clone: yes
+  ansible.builtin.git:
+    repo: https://github.com/moodle/moodle.git
+    dest: /home/{{ ansible_user }}/moodle # Ziel Ordner
+    clone: yes
