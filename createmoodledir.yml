@@ -1,6 +1,5 @@
 - hosts: ansible-moodle
 - name: Create a directory if it does not exist
-  ansible.builtin.file:
-    path: /home/{{ ansible_user }}/moodle
-    state: directory
-    mode: '0755'
+  task:
+  bash:
+    mkdir: "mkdir /home/{{ ansible_user }}/moodle"
