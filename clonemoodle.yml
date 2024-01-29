@@ -1,11 +1,5 @@
 - hosts: ansible-moodle
   tasks:
-  - name: Erstelle Moodle Verzeichnis.
-  ansible.builtin.file:
-    path: /home/{{ ansible_user }}/moodle
-    state: directory
-- hosts: ansible-moodle
-  tasks:
   - name: Klone Moodle von Git.
   ansible.builtin.git:
     repo: https://github.com/moodle/moodle.git
