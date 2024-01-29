@@ -4,12 +4,8 @@
   tasks:
       ansible.builtin.shell:
         cmd: sudo apt update && apt upgrade -y
-  tasks:
       - name: Installiere MariaDB
-        ansible.builtin.shell:
-          cmd: sudo apt install mariadb-server mariadb-client -y
-  tasks:
+        cmd: sudo apt install mariadb-server mariadb-client -y
       - name: Installiere Apache2
-        ansible.builtin.shell:
-          cmd: sudo apt install apache2 apache2-doc -y
+        cmd: sudo apt install apache2 apache2-doc -y
   
