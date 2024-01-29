@@ -3,6 +3,5 @@
   - name: Klone Moodle von Git.
     ansible.builtin.git:
       repo: https://github.com/moodle/moodle.git
-      name: MOODLE_22_STABLE 
       dest: /home/homa
       clone: yes
