@@ -1,9 +1,76 @@
 ---
-- name: Installier LaMp.
-  hosts: ansible-moodle # Ansible-Hosts
+- name: LAMP Installation und Apache-Konfiguration
+  hosts: ansible-moodle
+  become: yes
+  become_user: root
+
   tasks:
-      ansible.builtin.shell:
-        cmd: sudo apt update && apt upgrade -y
-        cmd: sudo apt install mariadb-server mariadb-client -y
-        cmd: sudo apt install apache2 apache2-doc -y
-  
+    - name: Update apt-Paketliste
+      apt:
+        update_cache: yes
+
+    - name: Installiere Apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: Installiere MySQL
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Installiere PHP
+      apt:
+        name: php
+        state: present
+
+    - name: Installiere MySQL-Python-Paket (für MySQL-Anbindung in Ansible)
+      apt:
+        name: python3-mysqldb
+        state: present
+
+    - name: Starte und aktiviere Apache-Service
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Starte und aktiviere MySQL-Service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Kopiere PHP-Info-Datei
+      copy:
+        content: "<?php phpinfo(); ?>"
+        dest: /var/www/html/info.php
+      notify: Restart Apache
+
+    - name: Füge Apache-Konfiguration in die Datei ein
+      blockinfile:
+        path: /etc/apache2/apache2.conf  # Passe den Pfad entsprechend an
+        block: |
+          <IfModule mod_userdir.c>
+              UserDir public_html
+              UserDir disabled root
+
+              <Directory /home/*/public_html>
+                  AllowOverride All
+                  Options MultiViews Indexes SymLinksIfOwnerMatch
+                  <Limit GET POST OPTIONS>
+                      Order allow,deny
+                      Allow from all
+                  </Limit>
+                  <LimitExcept GET POST OPTIONS>
+                      Order deny,allow
+                      Deny from all
+                  </LimitExcept>
+              </Directory>
+          </IfModule>
+
+  handlers:
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
