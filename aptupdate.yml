@@ -4,7 +4,7 @@
   become_method: sudo
   tasks:
     - name: Führe Apt Update aus.
-      ansible.builtin.shell: apt update
+      ansible.builtin.shell: sudo apt update
       args:
         executable: /bin/bash
       register: log_update
