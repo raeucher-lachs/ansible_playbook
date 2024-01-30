@@ -10,10 +10,10 @@
     #  ansible.builtin.shell: mkdir /home/homa/moodle # Pfad für das Moodle-Repository
     #- name: Klone Moodle von Git.
     #  ansible.builtin.git:
-     #   repo: https://github.com/moodle/moodle.git
-    #    version: MOODLE_403_STABLE
-     #   dest: /home/homa/moodle # Ziel Ordner
-     #   clone: yes
+    #    repo: https://github.com/moodle/moodle.git
+    #   version: MOODLE_403_STABLE
+    #    dest: /home/homa/moodle # Ziel Ordner
+    #    clone: yes
     - name: Stelle php.ini ein.
       ansible.builtin.blockinfile:
         path: /etc/php/8.2/apache2/php.ini
@@ -36,5 +36,11 @@
       ansible.builtin.service:
         name: apache2
         state: restarted
-    - name: Erstelle Datenbank Passwort für root.
-      ansible.builtin.shell: mysqladmin -u root password '{{ rootdbpw }}'
+    #- name: Erstelle Datenbank Passwort für root.
+    #  ansible.builtin.shell: mysqladmin -u root password '{{ rootdbpw }}'
+    - name: Erstelle Datenbenbank für Moodle.
+      ansible.builtin.shell: |
+          mysql -u root &&
+          CREATE DATABASE moodle CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; &&
+          exit;
+      
