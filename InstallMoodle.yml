@@ -1,8 +1,11 @@
 ---
-- name: Erstelle Verzeichnis Moodle.
+- name: Installiere Moodle.
   become: yes
   hosts: ansible-moodle # Ansible-Hosts (Ziel für die Erstellung + Download)
   tasks:
+    - name: Installiere Git.
+      ansible.builtin.apt:
+        name: git
     - name: Erstelle Verzeichnis für Git-Paket.
       ansible.builtin.shell: mkdir /home/homa/moodle # Pfad für das Moodle-Repository
     - name: Klone Moodle von Git.
