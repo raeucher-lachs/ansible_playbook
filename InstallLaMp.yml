@@ -63,7 +63,6 @@
     - name: Bearbeite Default.conf.
       ansible.builtin.blockinfile:
         path: /etc/apache2/sites-enabled/000-default.conf
-        append_newline: true
         marker: "#Include conf-available/serve-cgi-bin.conf"
         insertafter: "conf"
         block: |
