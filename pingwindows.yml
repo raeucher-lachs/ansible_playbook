@@ -1,5 +1,5 @@
 ---
-- hosts: win
+- hosts: all
 - name: Example from an Ansible Playbook
   tasks:
     ansible.windows.win_ping:
