@@ -2,4 +2,4 @@
   become: yes
   tasks:
     - name: Führe Apt Update aus.
-      ansible.builtin.shell: sudo apt update -y
+      ansible.builtin.shell: sudo apt update
