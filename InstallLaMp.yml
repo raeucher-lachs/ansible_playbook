@@ -62,7 +62,7 @@
     - name: Richte Weiterleitung von HTTP auf HTTPS ein.
       ansible.builtin.shell: a2enmod rewrite
       ansible.builtin.blockinfile:
-        path: /var/www/html/index.html
+        path: /etc/apache2/sites-enabled/000-default.conf
         append_newline: true
         marker: "#Include conf-available/serve-cgi-bin.conf"
         insertafter: "conf"
