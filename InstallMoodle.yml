@@ -41,11 +41,17 @@
     #- name: Erstelle Datenbank für Moodle.
     #  ansible.builtin.shell: mysql -u root -e "CREATE DATABASE moodle CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"; 
     - name: Verschiebe Moodle Inhalt (Moodle -> /var/www/html/moodle)
-      ansible.builtin.shell: mv /home/homa/moodle/* /var/www/html/moodle
-    - name: Erstelle Verzeichnis Moodledata.
-      ansible.builtin.file:
-        path: /var/www/html/moodledata
-        state: directory
+      ansible.builtin.copy:
+        src: /home/homa/moodle/*
+        dest: /var/www/html/moodle
         owner: www-data
         group: www-data
         mode: '755'
+      #ansible.builtin.shell: mv /home/homa/moodle/* /var/www/html/moodle
+    #- name: Erstelle Verzeichnis Moodledata.
+    #  ansible.builtin.file:
+    #    path: /var/www/html/moodledata
+    #    state: directory
+    #    owner: www-data
+    #    group: www-data
+    #    mode: '755'
