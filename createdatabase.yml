@@ -4,10 +4,10 @@
   hosts: ansible-moodle # Ansible-Hosts (Ziel für die Erstellung + Download)
   tasks:
 - name: Erstelle Datenbank für Moodle.
-      community.mysql.mysql_db:
-        name: moodle
-        state: present
-        login_user: root
-        login_password: "{{ rootdbpw }}"
-        encoding: utf8mb4
-        collation: utf8mb4_unicode_ci
+  community.mysql.mysql_db:
+    name: moodle
+    state: present
+    login_user: root
+    login_password: "{{ rootdbpw }}"
+    encoding: utf8mb4
+    collation: utf8mb4_unicode_ci
