@@ -2,4 +2,4 @@
 - hosts: ansible-win
 - name: Example from an Ansible Playbook
   tasks:
-    ansible.builtin.ping:
+    - ansible.builtin.ping:
