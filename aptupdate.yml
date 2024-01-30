@@ -1,5 +1,6 @@
 ---
-- name: Führe Apt Update aus.
-  hosts: ansible-moodle
-  ansible.builtin.apt:
-    update_cache: yes
+- hosts: ansible-moodle
+  tasks:
+    - name: Führe Apt Update aus.
+      ansible.builtin.apt:
+        update_cache: yes
