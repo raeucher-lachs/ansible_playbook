@@ -1,5 +1,6 @@
 ---
 - hosts: ansible-moodle
+  become: yes
   tasks:
     - name: Führe Apt Update aus.
       ansible.builtin.apt:
