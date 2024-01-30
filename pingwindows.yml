@@ -1,5 +1,5 @@
 ---
 - hosts: ansible-win
-- name: Example from an Ansible Playbook
+- name: Teste Ping
   tasks:
-    - ansible.builtin.ping:
+    - win_ping:
