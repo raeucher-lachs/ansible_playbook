@@ -10,13 +10,31 @@
         pkg:
         - mariadb-server
         - mariadb-client 
-    - name: Installiere Apache2
+    - name: Installiere Apache2.
       ansible.builtin.apt:
         pkg:
         - apache2
-        - apache2-doc 
+        - apache2-doc
+    - name: Erstelle und akiviere SSL-Zertifikat.
+      ansible.builtin.shell: |
+          a2enmod ssl && 
+          systemctl restart apache2
+          openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt -nodes -subj "/C=DE/ST=NRW/L=Bochum/O=Moodle Install/OU=Private/CN=192.168.81.145"
+    - name: Erstelle conf-Datei für Moodle.
+      ansible.builtin.blockinfile:
+        path: /etc/apache2/sites-available/moodle.conf
+        block: |
+            <VirtualHost *:443>
+              ServerName 192.168.81.145
+              DocumentRoot /var/www/html
 
-    #- name: Aktiviere via a2enmod 
+              SSLEngine on
+              SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
+              SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
+            </VirtualHost>
+
+    #- name: Aktiviere 000-default.conf via a2enmod
+    #  ansible.builtin.shell: a2enmod 000-default.conf
 
         
 
