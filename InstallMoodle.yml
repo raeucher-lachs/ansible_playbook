@@ -1,0 +1,33 @@
+---
+- name: Erstelle Verzeichnis Moodle.
+  become: yes
+  hosts: ansible-moodle # Ansible-Hosts (Ziel für die Erstellung + Download)
+  vars:
+    moodlepath: /home/{{ ansible_user }}/moodle
+  tasks:
+    - name: Erstelle Verzeichnis für Git-Paket.
+      ansible.builtin.shell: mkdir '{{ moodlepath }}' # Pfad für das Moodle-Repository
+    - name: Klone Moodle von Git.
+      ansible.builtin.git:
+        repo: https://github.com/moodle/moodle.git
+        version: MOODLE_403_STABLE
+        dest: '{{ moodlepath }}' # Ziel Ordner
+        clone: yes
+    - name: Stelle php.ini ein.
+      ansible.builtin.blockinfile:
+        path: /etc/php/8.2/apache2/php.ini
+        marker: ";extension=ldap"
+        insertafter: "ldap"
+        block: |
+            extension=mysql.so 
+            extension=gd.so
+    - name: Bearbeitet Maximal Größe für Upload.
+      ansible.builtin.lineinfile:
+        path: /etc/php/8.2/apache2/php.ini
+        search_string: "upload_max_filesize = 2M"
+        line: upload_max_filesize = 80M
+    - name: Bearbeitet Maximal Größe für Posts.
+      ansible.builtin.lineinfile:
+        path: /etc/php/8.2/apache2/php.ini
+        search_string: "post_max_size = 8M"
+        line: post_max_size = 80M
