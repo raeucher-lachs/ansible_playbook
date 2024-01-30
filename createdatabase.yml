@@ -3,7 +3,7 @@
   hosts: ansible-moodle # Ansible-Hosts (Ziel für die Erstellung + Download)
   tasks:
     - name: erstelle Datenbank.
-      community.mysql.mysql_db:
+      mysql_db:
         name: moodle
         state: present
         
