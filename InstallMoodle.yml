@@ -32,3 +32,9 @@
         path: /etc/php/8.2/apache2/php.ini
         search_string: "post_max_size = 8M"
         line: post_max_size = 80M
+    - name: Starte Apache2 neu.
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+    - name: Erstelle Datenbank Passwort für root.
+      ansible.builtin.shell: mysqladmin -u root password '{{rootdbpw}}'
