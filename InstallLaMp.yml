@@ -70,6 +70,6 @@
             RewriteCond %{HTTPS} !=on
             RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=301,L]
     - name: Starte Apache2 neu.
-      ansible.builtin.apt:
+      ansible.builtin.service:
         name: apache2
         state: reloaded
