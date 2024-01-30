@@ -37,6 +37,10 @@
         name: apache2
         state: restarted
     - name: Erstelle Datenbank für Moodle.
-      mysql_db: name=moodle state=present login_user=root login_password="{{ rootdbpw }}" encoding=utf8mb4 collation=utf8mb4_unicode_ci
-
-      
+      community.mysql.mysql_db:
+        name: moodle
+        state: present
+        login_user: root
+        login_password: "{{ rootdbpw }}"
+        encoding: utf8mb4
+        collation: utf8mb4_unicode_ci
