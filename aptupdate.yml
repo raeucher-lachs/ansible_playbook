@@ -1,5 +1,6 @@
 ---
 - hosts: ansible-moodle
+  become: yes
   tasks:
     - name: Führe Apt Update aus.
       ansible.builtin.shell: sudo apt update
@@ -7,3 +8,7 @@
     - name: Zeige mögliche Updates
       ansible.builtin.debug:
         var: log_update.stdout_lines 
+
+        
+
+  
