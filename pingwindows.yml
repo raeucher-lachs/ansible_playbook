@@ -2,4 +2,4 @@
 - hosts: win
 - name: Example from an Ansible Playbook
   tasks:
-    win_ping:
+    ansible.windows.win_ping:
