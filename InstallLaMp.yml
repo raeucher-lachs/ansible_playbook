@@ -30,18 +30,19 @@
         block: |
             <VirtualHost *:443>
               ServerName 192.168.81.145
-              DocumentRoot /var/www/html/moodle
+              DocumentRoot /var/www/html
 
               SSLEngine on
               SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
               SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
             </VirtualHost>
-    - name: Erstelle Web-Verzeichnis Moodle.
-      ansible.builtin.file:
-        path: /var/www/html/moodle
-        state: directory
-        owner: www-data
-        group: www-data
+    - name: Ändere Rechte für Webverzeichnis.
+      ansible.builtin.shell: chown www-data:www-data /var/www/html
+    #  ansible.builtin.file:
+    #    path: /var/www/html/moodle
+    #    state: directory
+    #    owner: www-data
+    #    group: www-data
     - name: Aktiviere SSL-Verbindung für Moodle.
       ansible.builtin.shell: a2ensite moodle
     - name: Installiere PHP und PHP-MySQL
@@ -51,7 +52,7 @@
         - php-mysql
     - name: Erstelle PHP-Info Datei [https://url/test.php].
       ansible.builtin.lineinfile:
-        path: /var/www/html/moodle/test.php
+        path: /var/www/html/test.php
         line: <?php phpinfo(); ?>
         create: yes
     - name: Starte Apache2 neu.
