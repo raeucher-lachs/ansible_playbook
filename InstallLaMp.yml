@@ -59,8 +59,17 @@
         name: apache2
         state: reloaded
 
-    #- name: Aktiviere 000-default.conf via a2enmod
-    #  ansible.builtin.shell: a2enmod 000-default.conf
+    - name: Richte Weiterleitung von HTTP auf HTTPS ein.
+      ansible.builtin.shell: a2enmod rewrite
+      ansible.builtin.blockinfile:
+        path: /var/www/html/index.html
+        append_newline: true
+        marker: "#Include conf-available/serve-cgi-bin.conf"
+        insertafter: "conf"
+        block: |
+            RewriteEngine On
+            RewriteCond %{HTTPS} !=on
+            RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=301,L]
 
         
 
