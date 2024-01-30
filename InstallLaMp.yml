@@ -58,9 +58,9 @@
       ansible.builtin.service:
         name: apache2
         state: reloaded
-
-    - name: Richte Weiterleitung von HTTP auf HTTPS ein.
+    - name: Aktiviere Apache2 Weiterleitung.
       ansible.builtin.shell: a2enmod rewrite
+    - name: Bearbeite Default.conf.
       ansible.builtin.blockinfile:
         path: /etc/apache2/sites-enabled/000-default.conf
         append_newline: true
@@ -70,7 +70,3 @@
             RewriteEngine On
             RewriteCond %{HTTPS} !=on
             RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=301,L]
-
-        
-
-  
