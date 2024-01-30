@@ -1,0 +1,6 @@
+- name: LAMP Installation und Apache-Konfiguration
+  hosts: ansible-moodle
+
+- name: Führe Apt Update aus.
+  ansible.builtin.apt:
+    update_cache: yes
