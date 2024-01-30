@@ -7,6 +7,4 @@
       community.mysql.mysql_db:
         name: moodle
         state: present
-        login_user: root
-        login_password: "{{ rootdbpw }}"
-        encoding: utf8mb4
+        
