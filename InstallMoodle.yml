@@ -2,16 +2,14 @@
 - name: Erstelle Verzeichnis Moodle.
   become: yes
   hosts: ansible-moodle # Ansible-Hosts (Ziel für die Erstellung + Download)
-  vars:
-    moodlepath: /home/homa/moodle
   tasks:
     - name: Erstelle Verzeichnis für Git-Paket.
-      ansible.builtin.shell: mkdir {{ moodlepath }} # Pfad für das Moodle-Repository
+      ansible.builtin.shell: mkdir /home/homa/moodle # Pfad für das Moodle-Repository
     - name: Klone Moodle von Git.
       ansible.builtin.git:
         repo: https://github.com/moodle/moodle.git
         version: MOODLE_403_STABLE
-        dest: {{ moodlepath }} # Ziel Ordner
+        dest: /home/homa/moodle # Ziel Ordner
         clone: yes
     - name: Stelle php.ini ein.
       ansible.builtin.blockinfile:
