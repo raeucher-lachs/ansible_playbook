@@ -5,7 +5,7 @@
     - name: Führe Apt Update aus.
       ansible.builtin.apt:
         update_cache: yes
-      register: log_update
+        register: log_update
     - name: Zeige mögliche Updates
       ansible.builtin.debug:
         var: log_update.stdout_lines
@@ -16,10 +16,3 @@
     #- name: Installiere Apache2
     #  ansible.builtin.shell: apt install apache2 apache2-doc
     #- name: Aktiviere via a2enmod 
-
-        
-
-  
-        
-
-  
