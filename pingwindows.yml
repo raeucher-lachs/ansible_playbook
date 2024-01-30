@@ -1,0 +1,4 @@
+---
+hosts: win
+- name: Example from an Ansible Playbook
+  win_ping:
