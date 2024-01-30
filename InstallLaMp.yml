@@ -49,7 +49,7 @@
         pkg:
         - php
         - php-mysql
-    - name: Erstelle PHP-Info Datei.
+    - name: Erstelle PHP-Info Datei [https://url/test.php].
       ansible.builtin.lineinfile:
         path: /var/www/html/moodle/test.php
         line: <?php phpinfo(); ?>
@@ -69,6 +69,11 @@
             RewriteEngine On
             RewriteCond %{HTTPS} !=on
             RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=301,L]
+    - name: Richtige PHP-Module ein.
+      ansible.builtin.shell: |
+          a2dismod mpm_event && 
+          a2enmod mpm_prefork &&
+          a2enmod php8.2
     - name: Starte Apache2 neu.
       ansible.builtin.service:
         name: apache2
