@@ -37,10 +37,6 @@
         name: apache2
         state: restarted
     - name: Erstelle Datenbank für Moodle.
-      community.mysql.mysql_db:
-        name: moodle
-        state: present
-        login_user: root
-        login_password: "{{ rootdbpw }}"
-        encoding: utf8mb4
-        collation: utf8mb4_unicode_ci
+      ansible.builtin.shell: mysql -u root -e "CREATE DATABASE moodle CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"; 
+    
+      
