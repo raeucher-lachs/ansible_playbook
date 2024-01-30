@@ -36,12 +36,7 @@
       ansible.builtin.service:
         name: apache2
         state: restarted
-    - name: Erstelle Datenbenbank für Moodle.
-      mysql_db:
-        login_user: root
-        login_password: '{{ rootpwdb }}'
-        name: moodle 
-        collation: utf8mb4_unicode_ci
-        encoding: utf8mb4
-        state: present
+    - name: Erstelle Datenbank für Moodle.
+      mysql_db: name=moodle state=present login_user=root login_password="{{ rootdbpw }}" encoding=utf8mb4 collation=utf8mb4_unicode_ci
+
       
