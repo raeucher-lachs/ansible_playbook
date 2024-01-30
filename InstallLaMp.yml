@@ -1,77 +1,24 @@
 ---
-- name: LAMP Installation und Apache-Konfiguration
-  hosts: ansible-moodle
+- hosts: ansible-moodle
   become: yes
-  become_user: root
-  become_flags: '-s /bin/sh'
-
   tasks:
-    - name: Update apt-Paketliste
-      apt:
-        update_cache: yes
+    - name: Führe Apt Update aus.
+      ansible.builtin.shell: |
+        apt update &&
+        apt upgrade -y &&
+        apt clean
+      register: log_update
+    - name: Zeige mögliche Updates
+      ansible.builtin.debug:
+        var: log_update.stdout_lines
+    - name: Installiere MariaDB.
+      ansible.builtin.shell: |
+        apt install mariadb-server mariadb-client
+      register: log_datenbank
+    - name: Datenbank Installations log
+      ansible.builtin.debug:
+        var: log_datenbank.stdout_lines
 
-    - name: Installiere Apache2
-      apt:
-        name: apache2
-        state: present
+        
 
-    - name: Installiere MySQL
-      apt:
-        name: mysql-server
-        state: present
-
-    - name: Installiere PHP
-      apt:
-        name: php
-        state: present
-
-    - name: Installiere MySQL-Python-Paket (für MySQL-Anbindung in Ansible)
-      apt:
-        name: python3-mysqldb
-        state: present
-
-    - name: Starte und aktiviere Apache-Service
-      service:
-        name: apache2
-        state: started
-        enabled: yes
-
-    - name: Starte und aktiviere MySQL-Service
-      service:
-        name: mysql
-        state: started
-        enabled: yes
-
-    - name: Kopiere PHP-Info-Datei
-      copy:
-        content: "<?php phpinfo(); ?>"
-        dest: /var/www/html/info.php
-      notify: Restart Apache
-
-    - name: Füge Apache-Konfiguration in die Datei ein
-      blockinfile:
-        path: /etc/apache2/apache2.conf  # Passe den Pfad entsprechend an
-        block: |
-          <IfModule mod_userdir.c>
-              UserDir public_html
-              UserDir disabled root
-
-              <Directory /home/*/public_html>
-                  AllowOverride All
-                  Options MultiViews Indexes SymLinksIfOwnerMatch
-                  <Limit GET POST OPTIONS>
-                      Order allow,deny
-                      Allow from all
-                  </Limit>
-                  <LimitExcept GET POST OPTIONS>
-                      Order deny,allow
-                      Deny from all
-                  </LimitExcept>
-              </Directory>
-          </IfModule>
-
-  handlers:
-    - name: Restart Apache
-      service:
-        name: apache2
-        state: restarted
+  
