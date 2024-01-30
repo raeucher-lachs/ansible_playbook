@@ -39,8 +39,9 @@
     #- name: Erstelle Datenbank Passwort für root.
     #  ansible.builtin.shell: mysqladmin -u root password '{{ rootdbpw }}'
     - name: Erstelle Datenbenbank für Moodle.
-      ansible.builtin.shell: |
-          mysql -u root &&
-          CREATE DATABASE moodle CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; &&
-          exit;
+      mysql_db: >
+        name=moodle 
+        collation=utf8mb4_unicode_ci
+        encoding=utf8mb4
+        state=present
       
