@@ -3,7 +3,10 @@
   become: yes
   tasks:
     - name: Führe Apt Update aus.
-      ansible.builtin.shell: sudo apt update
+      ansible.builtin.shell: |
+        apt update &&
+        apt upgrade -y &&
+        apt clean
       register: log_update
     - name: Zeige mögliche Updates
       ansible.builtin.debug:
