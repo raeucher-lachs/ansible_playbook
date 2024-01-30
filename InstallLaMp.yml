@@ -30,12 +30,19 @@
         block: |
             <VirtualHost *:443>
               ServerName 192.168.81.145
-              DocumentRoot /var/www/html
+              DocumentRoot /var/www/html/moodle
 
               SSLEngine on
               SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
               SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
             </VirtualHost>
+    - name: Erstelle Web-Verzeichnis Moodle.
+      ansible.builtin.file:
+        path: /var/www/html/moodle
+        state: directory
+        owner: www-data
+        group: www-data
+
 
     #- name: Aktiviere 000-default.conf via a2enmod
     #  ansible.builtin.shell: a2enmod 000-default.conf
