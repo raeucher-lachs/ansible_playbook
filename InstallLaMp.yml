@@ -42,7 +42,22 @@
         state: directory
         owner: www-data
         group: www-data
-
+    - name: Aktiviere SSL-Verbindung für Moodle.
+      ansible.builtin.shell: a2ensite moodle
+    - name: Installiere PHP und PHP-MySQL
+      ansible.builtin.apt:
+        pkg:
+        - php
+        - php-mysql
+    - name: Erstelle PHP-Info Datei.
+      ansible.builtin.lineinfile:
+        path: /var/www/html/moodle/test.php
+        line: <?php phpinfo(); ?>
+        create: yes
+    - name: Starte Apache2 neu.
+      ansible.builtin.service:
+        name: apache2
+        state: reloaded
 
     #- name: Aktiviere 000-default.conf via a2enmod
     #  ansible.builtin.shell: a2enmod 000-default.conf
