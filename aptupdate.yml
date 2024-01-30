@@ -1,7 +1,5 @@
 ---
 - hosts: ansible-moodle
-  become: yes
-  become_method: sudo
   tasks:
     - name: Führe Apt Update aus.
       ansible.builtin.shell: sudo apt update
