@@ -36,10 +36,8 @@
       ansible.builtin.service:
         name: apache2
         state: restarted
-    #- name: Erstelle Datenbank Passwort für root.
-    #  ansible.builtin.shell: mysqladmin -u root password '{{ rootdbpw }}'
     - name: Erstelle Datenbenbank für Moodle.
-      community.mysql.mysql_db:
+      mysql_db:
         login_user: root
         login_password: '{{ rootpwdb }}'
         name: moodle 
