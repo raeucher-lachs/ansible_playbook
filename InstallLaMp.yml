@@ -73,8 +73,8 @@
       ansible.builtin.shell: |
           a2dismod mpm_event && 
           a2enmod mpm_prefork &&
-          a2enmod php8.2
+          a2enmod php8.2 &&
     - name: Starte Apache2 neu.
       ansible.builtin.service:
         name: apache2
-        state: reloaded
+        state: restarted
