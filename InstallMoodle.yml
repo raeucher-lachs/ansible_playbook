@@ -38,8 +38,8 @@
     #    state: restarted
     #- name: Erstelle Datenbank Passwort für root.
     #  ansible.builtin.shell: mysqladmin -u root password '{{ rootdbpw }}'
-    - name: Erstelle Datenbank für Moodle.
-      ansible.builtin.shell: mysql -u root -e "CREATE DATABASE moodle CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"; 
+    #- name: Erstelle Datenbank für Moodle.
+    #  ansible.builtin.shell: mysql -u root -e "CREATE DATABASE moodle CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"; 
     - name: Verschiebe Moodle Inhalt (Moodle -> /var/www/html/moodle)
       ansible.builtin.shell: mv /home/homa/moodle/* /var/www/html/moodle
     - name: Erstelle Verzeichnis Moodledata.
@@ -48,3 +48,4 @@
         state: directory
         owner: www-data
         group: www-data
+        mode: '755'
