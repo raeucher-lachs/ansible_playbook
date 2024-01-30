@@ -1,5 +1,5 @@
 ---
-- name: Installiere Moodle.
+- name: Erstelle Datenbank.
   hosts: ansible-moodle # Ansible-Hosts (Ziel für die Erstellung + Download)
   tasks:
     - name: erstelle Datenbank.
