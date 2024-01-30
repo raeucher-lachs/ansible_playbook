@@ -21,6 +21,10 @@
           systemctl restart apache2
           openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt -nodes -subj "/C=DE/ST=NRW/L=Bochum/O=Moodle Install/OU=Private/CN=192.168.81.145"
     - name: Erstelle conf-Datei für Moodle.
+      ansible.builtin.file:
+        path: /etc/apache2/sites-available/moodle.conf
+        state: touch
+    - name: Konfiguiere conf-Datei für Moodle.
       ansible.builtin.blockinfile:
         path: /etc/apache2/sites-available/moodle.conf
         block: |
