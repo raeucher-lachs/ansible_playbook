@@ -6,11 +6,11 @@
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
       ansible.windows.win_file:
-        path: {{ vhd_path }}
+        path: '{{ vhd_path }}'
         state: directory
     - name: Erstelle VHD-Datei.
       ansible.windows.win_powershell:
         script: New-VHD -Path {{ vhd_path }} -SizeBytes {{ vhd_size }} -Dynamic
-        register: create_vhd
+      register: create_vhd
       ansible.builtin.debug:
         var: create_vhd    
