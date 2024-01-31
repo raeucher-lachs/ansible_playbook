@@ -1,0 +1,6 @@
+- name: Erstelle VHD und VM unter Hyper-V.
+  hosts: ansible-win
+  become: yes
+  tasks:
+    - name: Erstelle VHD-Datei.
+    
