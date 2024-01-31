@@ -3,6 +3,7 @@
   vars:
     vhd_path: 'C:\Hyper-V\VMs\VHD'
     vhd_size: '20 GB'
+    vhd_name: 'vm001.vhdx'
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
       ansible.windows.win_file:
@@ -10,5 +11,5 @@
         state: directory
     - name: Erstelle VHD-Datei.
       ansible.windows.win_powershell:
-        script: New-VHD -Path {{ vhd_path }}\vm001.vhdx -SizeBytes {{ vhd_size }} -Dynamic
+        script: New-VHD -Path {{ vhd_path }}\{{ vhd_name }} -SizeBytes {{ vhd_size }} -Dynamic
          
