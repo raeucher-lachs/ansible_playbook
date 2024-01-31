@@ -1,6 +1,11 @@
 - name: Erstelle VHD und VM unter Hyper-V.
   hosts: ansible-win
-  become: yes
   tasks:
+    - name: Erstelle Verzeichnisse für Hyper-V VMs.
+      ansible.windows.win_file:
+        path: C:\Hyper-V\VMs\VHD
+        state: directory
     - name: Erstelle VHD-Datei.
-    
+      ansible.windows.win_powershell:
+        script: |
+          

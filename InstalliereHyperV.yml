@@ -1,6 +1,5 @@
 ---
 - hosts: ansible-win
-  #become: yes # Um die Installation mit Administratorrechte auszuführen
   tasks:
     - name: Installiere die Rolle Hyper-V.
       ansible.windows.win_feature:
