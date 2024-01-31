@@ -3,6 +3,6 @@
   hosts: ansible-win
   become: yes
   tasks:
-    ansible.windows.win_feature:
-      name: Hyper-V
-      state: present
+      ansible.windows.win_feature:
+        name: Hyper-V
+        state: present
