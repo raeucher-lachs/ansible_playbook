@@ -8,7 +8,7 @@
     vswitch_name: 'Privat01'
     vm_name: 'VM001'
     vm_ram: '1GB'
-    vm_hddtype: 'VHDX'
+    vm_hddtype: 'VHD'
     vm_path: 'C:\Hyper-V\VMs'
     vm_gen: '2'
   tasks:
