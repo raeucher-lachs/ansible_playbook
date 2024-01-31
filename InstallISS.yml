@@ -7,8 +7,9 @@
       ansible.windows.win_feature:
         name: Web-Server
         state: absent
-      register: hyperv_feature
+      register: win_feature
+    - name: Starte nach der Installation neu.
       ansible.windows.win_reboot:
-      when: hyperv_feature.reboot_required
+      when: win_feature.reboot_required
       
     
