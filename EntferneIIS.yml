@@ -1,0 +1,12 @@
+---
+- name: Installiere das Feature IIS.
+  hosts: ansible-win
+  become: yes
+  tasks:
+    - name: Rolle wird Installiert.
+      ansible.windows.win_feature:
+        name: Web-Server
+        state: absent
+      
+      
+    
