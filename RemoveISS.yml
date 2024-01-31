@@ -1,0 +1,10 @@
+---
+- name: Entferne das Feature IIS.
+  hosts: ansible-win
+  become: yes
+  tasks:
+    - name: Rolle wird Entfernt.
+      ansible.windows.win_feature:
+        name: Web-Server
+        state: absent
+    
