@@ -11,6 +11,8 @@
     vm_hddtype: 'VHD'
     vm_path: 'C:\Hyper-V\VMs'
     vm_gen: '2'
+    vm_iso_path: 'C:\ISOs\'
+    vm_iso_name: 'debian-12.4.0-amd64-netinst.iso'
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
       ansible.windows.win_file:
@@ -24,7 +26,8 @@
         script: |
           New-VMSwitch -Name {{ vswitch_name }} -AllowManagementOS $True -NetAdapterName {{ netadapter_name }};
           Set-VMSwitch {{ vswitch_name }} -SwitchType private
-    - name: Erstelle VM.
+    - name: Erstelle VM mit eingebundener ISO.
       ansible.windows.win_powershell:
         script: |
-          New-VM -Name {{ vm_name }} -MemoryStartupBytes {{ vm_ram }} -BootDevice {{ vm_hddtype }} -VHDPath {{ vhd_path }}\{{ vhd_name }} -Path {{ vm_path }} -Generation {{ vm_gen }} -Switch {{ vswitch_name }}
+          New-VM -Name {{ vm_name }} -MemoryStartupBytes {{ vm_ram }} -BootDevice {{ vm_hddtype }} -VHDPath {{ vhd_path }}\{{ vhd_name }} -Path {{ vm_path }} -Generation {{ vm_gen }} -Switch {{ vswitch_name }};
+          Add-VMDvdDrive -VMName {{ vm_name }} -Path {{ vm_iso_path }}{{ vm_iso_name }}
