@@ -14,8 +14,8 @@
     - name: Erstelle VHD-Datei.
       ansible.windows.win_powershell:
         script: New-VHD -Path {{ vhd_path }}\{{ vhd_name }} -SizeBytes {{ vhd_size }} -Dynamic
-    - name: Erstelle virtuellen Netzwerkadapter.      
+    - name: Erstelle privaten virtuellen Netzwerkadapter.      
       ansible.windows.win_powershell:
         script: |
-          $net = Get-NetAdapter -Name {{ netadapter_name }}
-          New-VMSwitch -Name {{ vswitch_name }} -SwitchType Private -AllowManagementOS $True -NetAdapterName $net.Name
+          New-VMSwitch -Name {{ vswitch_name }} -AllowManagementOS $True -NetAdapterName {{ netadapter_name }};
+          Set-VMSwitch {{ vswitch_name }} -SwitchType private
