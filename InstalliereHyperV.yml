@@ -4,5 +4,5 @@
   become: yes
   tasks:
     ansible.windows.win_feature:
-    name: Hyper-V
-    state: present
+      name: Hyper-V
+      state: present
