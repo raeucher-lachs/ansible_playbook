@@ -1,11 +1,11 @@
 ---
 - hosts: ansible-win
-  become: yes
+  become: yes # Um die Installation mit Administratorrechte auszuführen
   tasks:
     - name: Installiere die Rolle Hyper-V.
       ansible.windows.win_feature:
         name: Hyper-V
-        state: absent # absent Entfernt, present Installiert
+        state: present # absent Entfernt, present Installiert
       register: hyperv_feature
     - name: Starte nach der Installation neu.
       ansible.windows.win_reboot:
