@@ -2,7 +2,7 @@
   hosts: ansible-win
   vars:
     vhd_path: 'C:\Hyper-V\VMs\VHD'
-    vhd_size: '20 GB'
+    vhd_size: '20GB'
     vhd_name: 'vm001.vhdx'
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
