@@ -4,6 +4,8 @@
     vhd_path: 'C:\Hyper-V\VMs\VHD'
     vhd_size: '20GB'
     vhd_name: 'vm001.vhdx'
+    netadapter_name: 'Ethernet1'
+    vswitch_name: 'Privat01' 
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
       ansible.windows.win_file:
@@ -12,4 +14,8 @@
     - name: Erstelle VHD-Datei.
       ansible.windows.win_powershell:
         script: New-VHD -Path {{ vhd_path }}\{{ vhd_name }} -SizeBytes {{ vhd_size }} -Dynamic
-         
+    - name: Erstelle virtuellen Netzwerkadapter.      
+      ansible.windows.win_powershell:
+        script: |
+          $net = Get-NetAdapter -Name {{ netadapter_name }}
+          New-VMSwitch -Name {{ vswitch_name }} -SwitchType Private -AllowManagementOS $True -NetAdapterName $net.Name
