@@ -1,8 +1,6 @@
 ---
 - name: Installiere das Feature IIS.
   hosts: ansible-win
-  gather_facts: false
-  become: no
   tasks:
     - name: Rolle wird Installiert.
       ansible.windows.win_feature:
