@@ -1,0 +1,8 @@
+---
+- name: Installiere die Rolle Hyper-V.
+  hosts: ansible-win
+  become: yes
+  tasks:
+    ansible.windows.win_feature:
+    name: Hyper-V
+    state: present
