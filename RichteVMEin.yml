@@ -13,6 +13,7 @@
     vm_gen: '2'
     vm_iso_path: 'C:\ISOs\'
     vm_iso_name: 'debian-12.4.0-amd64-netinst.iso'
+    vm_sec_boottype: 'MicrosoftUEFICertificateAuthority'
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
       ansible.windows.win_file:
@@ -34,5 +35,5 @@
     - name: Ändere Boot-Reihenfolge der VM {{ vm_name }}.
       ansible.windows.win_powershell:
         script: |
-           Set-VMFirmware -VMName {{ vm_name }} -BootOrder $(Get-VMDvdDrive -VMName {{ vm_name }}), $(Get-VMHardDiskDrive -VMName {{ vm_name }}), $(Get-VMNetworkAdapter -VMName {{ vm_name }})
-           
+           Set-VMFirmware -VMName {{ vm_name }} -BootOrder $(Get-VMDvdDrive -VMName {{ vm_name }}), $(Get-VMHardDiskDrive -VMName {{ vm_name }}), $(Get-VMNetworkAdapter -VMName {{ vm_name }});
+           Set-VMFirmware -VMName {{ vm_name }} -SecureBootTemplate {{ vm_sec_boottype }}
