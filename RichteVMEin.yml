@@ -36,4 +36,7 @@
       ansible.windows.win_powershell:
         script: |
            Set-VMFirmware -VMName {{ vm_name }} -BootOrder $(Get-VMDvdDrive -VMName {{ vm_name }}), $(Get-VMHardDiskDrive -VMName {{ vm_name }}), $(Get-VMNetworkAdapter -VMName {{ vm_name }});
+    - name: Ändere Secure-Boot Vorlage in {{ vm_sec_boottype }}.
+      ansible.windows.win_powershell:
+        script: | 
            Set-VMFirmware -VMName {{ vm_name }} -SecureBootTemplate {{ vm_sec_boottype }}
