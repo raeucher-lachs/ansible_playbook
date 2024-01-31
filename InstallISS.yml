@@ -6,7 +6,7 @@
     - name: Rolle wird Installiert.
       ansible.windows.win_feature:
         name: Web-Server
-        state: present
+        state: absent
       register: hyperv_feature
       ansible.windows.win_reboot:
       when: hyperv_feature.reboot_required
