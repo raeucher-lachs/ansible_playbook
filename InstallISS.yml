@@ -6,10 +6,10 @@
     - name: Rolle wird Installiert.
       ansible.windows.win_feature:
         name: Web-Server
-        state: absent
+        state: present
       register: win_feature
     - name: Starte nach der Installation neu.
-      ansible.windows.win_reboot:
-      when: win_feature.reboot_required
+      ansible.windows.win_powershell:
+        script: Restart-Computer
       
     
