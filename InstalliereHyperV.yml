@@ -5,4 +5,8 @@
     - name: Installiere die Rolle Hyper-V.
       ansible.windows.win_feature:
         name: Hyper-V
-        state: present
+        state: absent # absent Entfernt, present Installiert
+      register: hyperv_feature
+    - name: Starte nach der Installation neu.
+      ansible.windows.win_reboot:
+        when: hyperv_feature.reboot_required
