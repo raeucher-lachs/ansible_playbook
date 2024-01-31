@@ -5,7 +5,12 @@
     vhd_size: '20GB'
     vhd_name: 'vm001.vhdx'
     netadapter_name: 'Ethernet1'
-    vswitch_name: 'Privat01' 
+    vswitch_name: 'Privat01'
+    vm_name: 'VM001'
+    vm_ram: '1GB'
+    vm_hddtype: 'VHDX'
+    vm_path: 'C:\Hyper-V\VMs'
+    vm_gen: '2'
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
       ansible.windows.win_file:
@@ -19,3 +24,7 @@
         script: |
           New-VMSwitch -Name {{ vswitch_name }} -AllowManagementOS $True -NetAdapterName {{ netadapter_name }};
           Set-VMSwitch {{ vswitch_name }} -SwitchType private
+    - name: Erstelle VM.
+      ansible.windows.win_powershell:
+        script: |
+          New-VM -Name {{ vm_name }} -MemoryStartupBytes {{ vm_ram }} -BootDevice {{ vm_hddtype }} -VHDPath {{ vhd_path }}\{{ vhd_name }} -Path {{ vm_path }} -Generation {{ vm_gen }} -Switch {{ vswitch_name }}
