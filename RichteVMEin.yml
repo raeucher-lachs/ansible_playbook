@@ -31,3 +31,8 @@
         script: |
           New-VM -Name {{ vm_name }} -MemoryStartupBytes {{ vm_ram }} -BootDevice {{ vm_hddtype }} -VHDPath {{ vhd_path }}\{{ vhd_name }} -Path {{ vm_path }} -Generation {{ vm_gen }} -Switch {{ vswitch_name }};
           Add-VMDvdDrive -VMName {{ vm_name }} -Path {{ vm_iso_path }}{{ vm_iso_name }}
+    - name: Ändere Boot-Reihenfolge der VM {{ vm_name }}.
+      ansible.windows.win_powershell:
+        script: |
+           Set-VMFirmware -VMName {{ vm_name }} -BootOrder $(Get-VMDvdDrive -VMName {{ vm_name }}), $(Get-VMHardDiskDrive -VMName {{ vm_name }}), $(Get-VMNetworkAdapter -VMName {{ vm_name }})
+           
