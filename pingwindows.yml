@@ -1,5 +1,3 @@
 ---
-- hosts: ansible-win
-- name: Teste Ping
-  tasks:
-    - win_ping:
+- hosts: all
+- win_ping:
