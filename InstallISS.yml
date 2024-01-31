@@ -8,7 +8,7 @@
         name: Web-Server
         state: present
       register: hyperv_feature
-    - name: Falls nötig wird der Host neugestartet.
       ansible.windows.win_reboot:
       when: hyperv_feature.reboot_required
+      
     
