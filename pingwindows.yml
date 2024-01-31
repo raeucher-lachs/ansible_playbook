@@ -3,4 +3,4 @@
   hosts: all
   tasks:
     - name: Überprüfe die Erreichbarkeit von Windows-Hosts
-      windows_ping:
+      win_ping:
