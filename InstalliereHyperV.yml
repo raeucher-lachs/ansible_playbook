@@ -5,6 +5,7 @@
       ansible.windows.win_feature:
         name: Hyper-V
         state: present # absent Entfernt, present Installiert
+        include_management_tools: true
       register: hyperv_feature
     - name: Starte nach der Installation neu.
       ansible.windows.win_reboot:
