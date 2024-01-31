@@ -1,0 +1,6 @@
+---
+- name: Ping Windows Host
+  hosts: all
+  tasks:
+    - name: Überprüfe die Erreichbarkeit von Windows-Hosts
+      ansible.windows.win_ping:
