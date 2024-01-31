@@ -1,6 +1,5 @@
----
 - name: Ping Windows Host
   hosts: all
   tasks:
     - name: Überprüfe die Erreichbarkeit von Windows-Hosts
-      community.windows_ping:
+      community.windows.win_ping:
