@@ -1,5 +1,5 @@
 ---
-  hosts: ansible-win
+- hosts: ansible-win
   become: yes
   tasks:
     - name: Installiere die Rolle Hyper-V.
