@@ -7,9 +7,6 @@
       ansible.windows.win_feature:
         name: Web-Server
         state: present
-      register: win_feature
-    - name: Starte nach der Installation neu.
-      ansible.windows.win_powershell:
-        script: Restart-Computer
+      
       
     
