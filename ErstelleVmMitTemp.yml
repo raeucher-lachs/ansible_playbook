@@ -27,7 +27,7 @@
     - name: Ändere den Netzwerkadapter der VM auf {{ vswitch_name }}.
       ansible.windows.win_powershell:
         script: Get-VM "{{ vm_name }}" | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName "{{ vswitch_name }}"
-    - name: VM {{ vm_name }} wurde erstellt.
+    - name: VM wurde erstellt.
       ansible.windows.win_powershell: 
         script: Get-VM -Name {{ vm_name }}
       register: get_vm
