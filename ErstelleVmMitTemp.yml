@@ -20,7 +20,7 @@
         script: |
           New-VMSwitch -Name {{ vswitch_name }} -AllowManagementOS $True -NetAdapterName {{ netadapter_name }};
           Set-VMSwitch {{ vswitch_name }} -SwitchType {{ vswitch_type }}
-    - name: Erstelle {{ vm_name }} anhand einer Vorlage ({{ vm_temp_name }}).
+    - name: Erstelle {{ vm_name }} anhand einer Vorlage {{ vm_temp_name }}.
       ansible.windows.win_powershell:
         script: |
           Import-VM -Path {{ vm_temp }} -Copy -GenerateNewId -VhdDestinationPath {{ vhd_path }} -VirtualMachinePath  {{ vm_path }};
