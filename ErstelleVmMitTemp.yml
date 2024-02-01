@@ -3,7 +3,7 @@
   hosts: ansible-win
   vars:
     vhd_path: C:\Hyper-V\VMs\VHD
-    vm_temp: C:\Debian-Vorlage\Virtual Machines\502AECEC-8F58-44C9-847D-41EF7CB79F9C.vmcx
+    vm_temp: C:\Exported_VM\Debian-Vorlage\Virtual Machines\502AECEC-8F58-44C9-847D-41EF7CB79F9C.vmcx
     vm_temp_name: Debian-Vorlage
     netadapter_name: Ethernet1
     vswitch_name: Privat01
@@ -17,17 +17,19 @@
         state: directory
     - name: Erstelle Netzwerkadapter.
       ansible.windows.win_powershell:
-        script: |
-          New-VMSwitch -Name {{ vswitch_name }} -SwitchType {{ vswitch_type }}
+        script: New-VMSwitch -Name "{{ vswitch_name }}" -SwitchType "{{ vswitch_type }}"
     - name: Erstelle VM anhand einer Vorlage.
       ansible.windows.win_powershell:
-        script: |
-          Import-VM -Path "{{ vm_temp }}" -Copy -GenerateNewId -VhdDestinationPath "{{ vhd_path }}" -VirtualMachinePath  "{{ vm_path }}";
-    - name: Vorlage wird in "{{ vm_name }}" umbenannt.
+        script: Import-VM -Path "{{ vm_temp }}" -Copy -GenerateNewId -VhdDestinationPath "{{ vhd_path }}" -VirtualMachinePath "{{ vm_path }}";
+    - name: Vorlage wird in {{ vm_name }} umbenannt.
       ansible.windows.win_powershell:
-        script: |
-          Rename-VM -Name "{{ vm_temp_name }}" -NewName "{{ vm_name }}";
+        script: Rename-VM -Name "{{ vm_temp_name }}" -NewName "{{ vm_name }}";
     - name: Ändere den Netzwerkadapter der VM auf {{ vswitch_name }}.
       ansible.windows.win_powershell:
-        script: |
-          Get-VM "{{ vm_name }}" | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName "{{ vswitch_name }}"
+        script: Get-VM "{{ vm_name }}" | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName "{{ vswitch_name }}"
+    - name: 'VM: {{ vm_name }} wurde erstellt.'
+      ansible.windows.win_powershell:
+        script: Get-VM -Name {{ vm_name }}
+      register: get_vm
+      ansible.builtin.debug:
+        var: result
