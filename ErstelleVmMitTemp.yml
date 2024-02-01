@@ -5,7 +5,7 @@
     vhd_path: 'C:\Hyper-V\VMs\VHD'
     vm_temp: 'C:\Exported_VM\Debian-Vorlage\Virtual Machines\502AECEC-8F58-44C9-847D-41EF7CB79F9C.vmcx'
     vm_temp_name: 'Debian-Vorlage'
-    netadapter_name: 'Ethernet0'
+    netadapter_name: 'Ethernet1'
     vswitch_name: 'Privat01'
     vswitch_type: 'Private'
     vm_name: 'VM001'
