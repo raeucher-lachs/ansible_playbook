@@ -4,7 +4,7 @@
     vhd_path: 'C:\Hyper-V\VMs\VHD'
     vhd_size: '20GB'
     vhd_name: 'vm001.vhdx'
-    netadapter_name: 'Ethernet0'
+    netadapter_name: 'Ethernet1'
     vswitch_name: 'Privat01'
     vswitch_type: 'Private'
     vm_name: 'VM001'
