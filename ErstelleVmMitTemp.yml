@@ -19,9 +19,9 @@
       ansible.windows.win_powershell:
         script: |
           New-VMSwitch -Name {{ vswitch_name }} -SwitchType {{ vswitch_type }}
-    - name: Erstelle {{ vm_name }} anhand einer Vorlage {{ vm_temp_name }}.
+    - name: Erstelle VM anhand einer Vorlage.
       ansible.windows.win_powershell:
         script: |
-          Import-VM -Path {{ vm_temp }} -Copy -GenerateNewId -VhdDestinationPath {{ vhd_path }} -VirtualMachinePath  {{ vm_path }};
+          Import-VM -Path {{ vm_temp }} -Copy -GenerateNewId;
           Rename-VM -Name {{ vm_temp_name }} -NewName {{ vm_name }};
           Get-VM {{ vm_name }} | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName {{ vswitch_name }}
