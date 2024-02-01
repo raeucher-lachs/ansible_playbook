@@ -13,7 +13,7 @@
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
       ansible.windows.win_file:
-        path: '{{ vhd_path }}'
+        path: "{{ vhd_path }}"
         state: directory
     - name: Erstelle Netzwerkadapter.
       ansible.windows.win_powershell:
@@ -27,10 +27,3 @@
     - name: Ändere den Netzwerkadapter der VM auf {{ vswitch_name }}.
       ansible.windows.win_powershell:
         script: Get-VM "{{ vm_name }}" | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName "{{ vswitch_name }}"
-    - name: VM wurde erstellt.
-      ansible.windows.win_powershell: 
-        script: Get-VM -Name {{ vm_name }}
-      register: get_vm
-    - name: Ausgabe
-      ansible.builtin.debug:
-        var: get_vm.stdout_lines 
