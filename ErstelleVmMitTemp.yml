@@ -24,6 +24,10 @@
         script: |
           Import-VM -Path "{{ vm_temp }}" -Copy -GenerateNewId -VhdDestinationPath "{{ vhd_path }}" -VirtualMachinePath  "{{ vm_path }}";
     - name: Vorlage wird in "{{ vm_name }}" umbenannt.
+      ansible.windows.win_powershell:
+        script: |
           Rename-VM -Name "{{ vm_temp_name }}" -NewName "{{ vm_name }}";
     - name: Ändere den Netzwerkadapter der VM auf {{ vswitch_name }}.
+      ansible.windows.win_powershell:
+        script: |
           Get-VM "{{ vm_name }}" | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName "{{ vswitch_name }}"
