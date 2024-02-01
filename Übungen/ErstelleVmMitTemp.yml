@@ -3,17 +3,13 @@
   hosts: ansible-win
   vars:
     vhd_path: 'C:\Hyper-V\VMs\VHD'
-    vhd_size: '20GB'
-    vhd_name: 'vm001.vhdx'
-    netadapter_name: 'Ethernet1' # Für Extern meistens 0 
+    vm_temp: 'C:\Exported_VM\Debian-Vorlage\Virtual Machines\502AECEC-8F58-44C9-847D-41EF7CB79F9C.vmcx'
+    vm_temp_name: 'Debian-Vorlage'
+    netadapter_name: 'Ethernet0'
     vswitch_name: 'Privat01'
     vswitch_type: 'Private'
     vm_name: 'VM001'
-    vm_ram: '1GB'
-    vm_hddtype: 'VHD'
     vm_path: 'C:\Hyper-V\VMs'
-    vm_gen: '2'
-    vm_sec_boottype: 'MicrosoftUEFICertificateAuthority'
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
       ansible.windows.win_file:
@@ -24,7 +20,9 @@
         script: |
           New-VMSwitch -Name {{ vswitch_name }} -AllowManagementOS $True -NetAdapterName {{ netadapter_name }};
           Set-VMSwitch {{ vswitch_name }} -SwitchType {{ vswitch_type }}
-    - name: Ändere Secure-Boot Vorlage in {{ vm_sec_boottype }}.
+    - name: Erstelle {{ vm_name }} anhand einer Vorlage ({{ vm_temp_name }}).
       ansible.windows.win_powershell:
-        script: | 
-           Set-VMFirmware -VMName {{ vm_name }} -SecureBootTemplate {{ vm_sec_boottype }}
+        script: |
+          Import-VM -Path {{ vm_temp }} -Copy -GenerateNewId -VhdDestinationPath {{ vhd_path }} -VirtualMachinePath  {{ vm_path }};
+          Rename-VM -Name {{ vm_temp_name }} -NewName {{ vm_name }};
+          Get-VM {{ vm_name }} | Get-VMNetworkAdapter | Connect-VMNetworkAdapter -SwitchName {{ vswitch_name }}
