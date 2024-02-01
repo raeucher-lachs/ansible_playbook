@@ -5,7 +5,7 @@
     vhd_path: 'C:\Hyper-V\VMs\VHD'
     vhd_size: '20GB'
     vhd_name: 'vm001.vhdx'
-    netadapter_name: 'Ethernet1'
+    netadapter_name: 'Ethernet1' # Für Extern meistens 0 
     vswitch_name: 'Privat01'
     vswitch_type: 'Private'
     vm_name: 'VM001'
@@ -13,8 +13,6 @@
     vm_hddtype: 'VHD'
     vm_path: 'C:\Hyper-V\VMs'
     vm_gen: '2'
-    vm_iso_path: 'C:\ISOs\'
-    vm_iso_name: 'debian-12.4.0-amd64-netinst.iso'
     vm_sec_boottype: 'MicrosoftUEFICertificateAuthority'
   tasks:
     - name: Erstelle Verzeichnisse für Hyper-V VMs.
