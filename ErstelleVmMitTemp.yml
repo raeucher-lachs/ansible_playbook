@@ -15,7 +15,7 @@
       ansible.windows.win_file:
         path: '{{ vhd_path }}'
         state: directory
-    - name: Erstelle virtuellen Netzwerkadapter {{ vswitch_name }} ({{ vswitch_type }}).      
+    - name: Erstelle virtuellen Netzwerkadapter {{ vswitch_name }}.      
       ansible.windows.win_powershell:
         script: |
           New-VMSwitch -Name {{ vswitch_name }} -AllowManagementOS $True -NetAdapterName {{ netadapter_name }};
