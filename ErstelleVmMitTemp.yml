@@ -18,8 +18,7 @@
     - name: Erstelle Netzwerkadapter.
       ansible.windows.win_powershell:
         script: |
-          New-VMSwitch -Name {{ vswitch_name }} -AllowManagementOS $True -NetAdapterName {{ netadapter_name }};
-          Set-VMSwitch {{ vswitch_name }} -SwitchType {{ vswitch_type }}
+          New-VMSwitch -Name {{ vswitch_name }} -SwitchType {{ vswitch_type }}
     - name: Erstelle {{ vm_name }} anhand einer Vorlage {{ vm_temp_name }}.
       ansible.windows.win_powershell:
         script: |
