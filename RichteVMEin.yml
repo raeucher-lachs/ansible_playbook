@@ -6,6 +6,7 @@
     vhd_name: 'vm001.vhdx'
     netadapter_name: 'Ethernet1'
     vswitch_name: 'Privat01'
+    vswitch_type: 'Private'
     vm_name: 'VM001'
     vm_ram: '1GB'
     vm_hddtype: 'VHD'
@@ -26,7 +27,7 @@
       ansible.windows.win_powershell:
         script: |
           New-VMSwitch -Name {{ vswitch_name }} -AllowManagementOS $True -NetAdapterName {{ netadapter_name }};
-          Set-VMSwitch {{ vswitch_name }} -SwitchType private
+          Set-VMSwitch {{ vswitch_name }} -SwitchType {{ vswitch_type }}
     - name: Erstelle VM mit eingebundener ISO.
       ansible.windows.win_powershell:
         script: |
