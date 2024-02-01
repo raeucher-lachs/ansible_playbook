@@ -31,5 +31,6 @@
       ansible.windows.win_powershell: 
         script: Get-VM -Name {{ vm_name }}
       register: get_vm
+    - name: Ausgabe
       ansible.builtin.debug:
         var: get_vm
