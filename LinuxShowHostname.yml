@@ -1,0 +1,8 @@
+---
+- name: Get hostname and IP address of Linux Server
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Display hostname and IP address
+      debug:
+        msg: "Hostname: {{ ansible_hostname }}, IP Address: {{ ansible_default_ipv4.address }}"
