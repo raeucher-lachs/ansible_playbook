@@ -1,0 +1,51 @@
+---
+- name: Installiere Wazuh für Debian (Indexer, Manager/Server und Dashboard).
+  become: yes
+  hosts: ansible-wazuh
+  vars:
+    wazuh_dict_name: wazuh
+    config_yml_ip: "127.0.0.1"
+  tasks:
+    - name: Erstelle Verzeichnis {{ wazuh_dict_name }}.
+      ansible.builtin.shell: mkdir ~/{{ wazuh_dict_name }}
+    - name: Prüfe ob curl installiert ist.
+      ansible.builtin.apt:
+        name: curl
+        state: present
+    - name: Lade mit curl wazuh-cert-tool.sh und config.yml runter.
+      ansible.builtin.shell: |
+         curl -sO https://packages.wazuh.com/4.7/wazuh-certs-tool.sh
+         curl -sO https://packages.wazuh.com/4.7/config.yml
+    - name: Passe IP-Adressen der config.yml-Datei an.
+      ansible.builtin.lineinfile:
+        path: ~/{{ wazuh_dict_name }}/config.yml
+        search_string: |
+            indexer:
+              - name: node-1
+                ip: "<indexer-node-ip>"
+        line: |
+            indexer:
+              - name: node-1
+                ip: {{ config_yml_ip }}
+    -
+      ansible.builtin.lineinfile:
+        path: ~/{{ wazuh_dict_name }}/config.yml
+        search_string: |
+            server:
+              - name: wazuh-1
+                ip: "<wazuh-manager-ip>"
+        line: |
+            server:
+              - name: wazuh-1
+                ip: {{ config_yml_ip }}
+    -
+      ansible.builtin.lineinfile:
+        path: ~/{{ wazuh_dict_name }}/config.yml
+        search_string: |
+            dashboard:
+              - name: dashboard
+                ip: "<dashboard-node-ip>"
+        line: |
+            dashboard:
+              - name: dashboard
+                ip: {{ config_yml_ip }}
