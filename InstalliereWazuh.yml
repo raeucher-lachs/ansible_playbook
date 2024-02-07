@@ -5,47 +5,142 @@
   vars:
     wazuh_dict_name: wazuh
     config_yml_ip: "127.0.0.1"
+    user_name: debian
   tasks:
     - name: Erstelle Verzeichnis {{ wazuh_dict_name }}.
-      ansible.builtin.shell: mkdir ~/{{ wazuh_dict_name }}
+      ansible.builtin.file:
+        path: /home/{{ user_name }}/{{ wazuh_dict_name }}
+        state: directory
     - name: Prüfe ob curl installiert ist.
       ansible.builtin.apt:
         name: curl
         state: present
-    - name: Lade mit curl wazuh-cert-tool.sh und config.yml runter.
+    - name: Lade mit curl wazuh-cert-tool.sh runter.
       ansible.builtin.shell: |
+         cd /home/{{ user_name }}/{{ wazuh_dict_name }} &&
          curl -sO https://packages.wazuh.com/4.7/wazuh-certs-tool.sh
-         curl -sO https://packages.wazuh.com/4.7/config.yml
-    - name: Passe IP-Adressen der config.yml-Datei an.
-      ansible.builtin.lineinfile:
-        path: ~/{{ wazuh_dict_name }}/config.yml
-        search_string: |
+    - name: Erstelle config.yml.
+      ansible.builtin.file:
+        path: /home/{{ user_name }}/{{ wazuh_dict_name }}/config.yml
+        state: touch
+    - name: Passe config.yml an.
+      ansible.builtin.blockinfile:
+        path: /home/{{ user_name }}/{{ wazuh_dict_name }}/config.yml
+        block: |
+          nodes:
+            # Wazuh indexer nodes
             indexer:
               - name: node-1
-                ip: "<indexer-node-ip>"
-        line: |
-            indexer:
-              - name: node-1
-                ip: {{ config_yml_ip }}
-    -
-      ansible.builtin.lineinfile:
-        path: ~/{{ wazuh_dict_name }}/config.yml
-        search_string: |
+                ip: "{{ config_yml_ip }}"
+              #- name: node-2
+              #  ip: "<indexer-node-ip>"
+              #- name: node-3
+              #  ip: "<indexer-node-ip>"
+
+            # Wazuh server nodes
+            # If there is more than one Wazuh server
+            # node, each one must have a node_type
             server:
               - name: wazuh-1
-                ip: "<wazuh-manager-ip>"
-        line: |
-            server:
-              - name: wazuh-1
-                ip: {{ config_yml_ip }}
-    -
+                ip: "{{ config_yml_ip }}"
+              #  node_type: master
+              #- name: wazuh-2
+              #  ip: "<wazuh-manager-ip>"
+              #  node_type: worker
+              #- name: wazuh-3
+              #  ip: "<wazuh-manager-ip>"
+              #  node_type: worker
+
+            # Wazuh dashboard nodes
+            dashboard:
+              - name: dashboard
+                ip: "{{ config_yml_ip }}"
+    - name: Führe wazuh-cert-tool.sh aus.
+      ansible.builtin.shell: |
+            cd /home/{{ user_name }}/{{ wazuh_dict_name }}/ && 
+            bash ./wazuh-certs-tool.sh -A 
+    - name: Erzeuge aus Verzeichnis .tar-Archiv und lösche Verzeichnis.
+      ansible.builtin.shell: |
+            cd /home/{{ user_name }}/{{ wazuh_dict_name }}/ &&
+            tar -cvf ./wazuh-certificates.tar -C ./wazuh-certificates/ . &&
+            rm -rf ./wazuh-certificates
+    - name: Prüfe ob gnupg und apt-transport-https installiert ist.
+      ansible.builtin.apt:
+        pkg:
+        - gnupg
+        - apt-transport-https
+    - name: Füge Wazuh-Repository hinzu.
+      ansible.builtin.shell: |
+            curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg &&
+            echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
+    - name: Führe Apt Update aus.
+      ansible.builtin.apt:
+        update_cache: yes
+    - name: Installiere Wazuh-Indexer.
+      ansible.builtin.apt:
+        name: wazuh-indexer
+    - name: Passe IP an (opensearch.yml).
       ansible.builtin.lineinfile:
-        path: ~/{{ wazuh_dict_name }}/config.yml
-        search_string: |
-            dashboard:
-              - name: dashboard
-                ip: "<dashboard-node-ip>"
-        line: |
-            dashboard:
-              - name: dashboard
-                ip: {{ config_yml_ip }}
+        path: /etc/wazuh-indexer/opensearch.yml
+        search_string: "network.host:"
+        line: 'network.host: "{{ config_yml_ip }}"'
+    - name: Verschiebe Zertifikate.
+      ansible.builtin.shell: |
+            NODE_NAME=node-1
+            mkdir /etc/wazuh-indexer/certs;
+            cd /home/{{ user_name }}/{{ wazuh_dict_name }}/ &&
+            tar -xf ./wazuh-certificates.tar -C /etc/wazuh-indexer/certs/ ./$NODE_NAME.pem ./$NODE_NAME-key.pem ./admin.pem ./admin-key.pem ./root-ca.pem &&
+            mv -n /etc/wazuh-indexer/certs/$NODE_NAME.pem /etc/wazuh-indexer/certs/indexer.pem &&
+            mv -n /etc/wazuh-indexer/certs/$NODE_NAME-key.pem /etc/wazuh-indexer/certs/indexer-key.pem &&
+            chmod 500 /etc/wazuh-indexer/certs &&
+            chmod 400 /etc/wazuh-indexer/certs/* &&
+            chown -R wazuh-indexer:wazuh-indexer /etc/wazuh-indexer/certs
+    - name: Starte und aktiviere Wazuh-Indexer.
+      ansible.builtin.shell: |
+            systemctl daemon-reload &&
+            systemctl enable wazuh-indexer &&
+            systemctl start wazuh-indexer
+    - name: Installiere Wazuh-Manager und Filebeat.
+      ansible.builtin.apt:
+        pkg: 
+        - wazuh-manager
+        - filebeat
+    - name: Starte Wazuh-Manager.
+      ansible.builtin.shell: |
+            systemctl daemon-reload &&
+            systemctl enable wazuh-manager &&
+            systemctl start wazuh-manager
+    - name: Lade Standardkonfigurationsdatei für Filebear runter.
+      ansible.builtin.shell: |
+            curl -so /etc/filebeat/filebeat.yml https://packages.wazuh.com/4.7/tpl/wazuh/filebeat/filebeat.yml &&
+            filebeat keystore create
+    - name: Richte Benutzer und Passwort für Filebeat ein.
+      ansible.builtin.shell: |
+            echo {{ filebeat_user }} | filebeat keystore add username --stdin --force;
+            echo {{ filebeat_pass }} | filebeat keystore add password --stdin --force;
+    - name: Lade Wazuh-Modul für Filebear runter.
+      ansible.builtin.shell: curl -s https://packages.wazuh.com/4.x/filebeat/wazuh-filebeat-0.3.tar.gz | tar -xvz -C /usr/share/filebeat/module
+    - name: Verschiebe Zertifikate für Wazuh-Manager.
+      ansible.builtin.shell: |
+            NODE_NAME=wazuh-1
+            mkdir /etc/filebeat/certs;
+            cd /home/{{ user_name }}/{{ wazuh_dict_name }}/ &&
+            tar -xf ./wazuh-certificates.tar -C /etc/filebeat/certs/ ./$NODE_NAME.pem ./$NODE_NAME-key.pem ./root-ca.pem &&
+            mv -n /etc/filebeat/certs/$NODE_NAME.pem /etc/filebeat/certs/filebeat.pem &&
+            mv -n /etc/filebeat/certs/$NODE_NAME-key.pem /etc/filebeat/certs/filebeat-key.pem &&
+            chmod 500 /etc/filebeat/certs &&
+            chmod 400 /etc/filebeat/certs/* &&
+            chown -R root:root /etc/filebeat/certs
+    - name: Starte Filebeat.
+      ansible.builtin.shell: |
+            systemctl daemon-reload
+            systemctl enable filebeat
+            systemctl start filebeat
+    - name: Teste Filebeat.
+      ansible.builtin.shell: |
+            bash /usr/share/wazuh-indexer/bin/indexer-security-init.sh;
+            filebeat test output
+      register: filebeat
+    - name: Zeige Output.
+      debug: var=filebeat
+
