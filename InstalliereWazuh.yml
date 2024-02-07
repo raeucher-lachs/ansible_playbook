@@ -118,6 +118,10 @@
       ansible.builtin.shell: |
             echo {{ filebeat_user }} | filebeat keystore add username --stdin --force;
             echo {{ filebeat_pass }} | filebeat keystore add password --stdin --force;
+    - name: Lade Alarm-Template runter.
+      ansible.builtin.shell: |
+            curl -so /etc/filebeat/wazuh-template.json https://raw.githubusercontent.com/wazuh/wazuh/v4.7.2/extensions/elasticsearch/7.x/wazuh-template.json &&
+            chmod go+r /etc/filebeat/wazuh-template.json
     - name: Lade Wazuh-Modul für Filebear runter.
       ansible.builtin.shell: curl -s https://packages.wazuh.com/4.x/filebeat/wazuh-filebeat-0.3.tar.gz | tar -xvz -C /usr/share/filebeat/module
     - name: Verschiebe Zertifikate für Wazuh-Manager.
@@ -169,5 +173,6 @@
             systemctl daemon-reload
             systemctl enable wazuh-dashboard
             systemctl start wazuh-dashboard
+    - name: Aufruf mit https://ip-des-managers
 
 
