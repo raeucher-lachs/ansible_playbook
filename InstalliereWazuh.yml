@@ -143,4 +143,31 @@
       register: filebeat
     - name: Zeige Output.
       debug: var=filebeat
+    - name: Prüfe ob debhelper, tar, curl, libcap2-bin installiert sind.
+      ansible.builtin.apt:
+        pkg:
+        - debhelper 
+        - tar 
+        - curl 
+        - libcap2-bin
+    - name: Installiere Wazuh-Dashboard.
+      ansible.builtin.apt:
+        name: wazuh-dashboard
+    - name: Verschiebe Zertifikate für Wazuh-Dashboard.
+      ansible.builtin.shell: |
+            NODE_NAME=dashboard
+            mkdir /etc/wazuh-dashboard/certs
+            cd /home/{{ user_name }}/{{ wazuh_dict_name }}/ &&
+            tar -xf ./wazuh-certificates.tar -C /etc/wazuh-dashboard/certs/ ./$NODE_NAME.pem ./$NODE_NAME-key.pem ./root-ca.pem &&
+            mv -n /etc/wazuh-dashboard/certs/$NODE_NAME.pem /etc/wazuh-dashboard/certs/dashboard.pem &&
+            mv -n /etc/wazuh-dashboard/certs/$NODE_NAME-key.pem /etc/wazuh-dashboard/certs/dashboard-key.pem &&
+            chmod 500 /etc/wazuh-dashboard/certs &&
+            chmod 400 /etc/wazuh-dashboard/certs/* &&
+            chown -R wazuh-dashboard:wazuh-dashboard /etc/wazuh-dashboard/certs
+    - name: Starte Wazuh-Dashboard.
+      ansible.builtin.shell: |
+            systemctl daemon-reload
+            systemctl enable wazuh-dashboard
+            systemctl start wazuh-dashboard
+
 
