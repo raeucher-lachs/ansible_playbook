@@ -1,6 +1,7 @@
 ---
 # Es muss sudo mit "apt install sudo" installiert sein, und der User muss in der Sudo-Datei drin stehen! #
 # Die Variablen filebeat_user und filebeat_pass müssten hinzugefügt werden - am besten in Semaphore #
+# Die Installation dauert ca. 20 Minuten #
 - name: Installiere Wazuh für Debian (Indexer, Manager/Server und Dashboard).
   become: yes
   hosts: all
