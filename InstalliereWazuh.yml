@@ -1,4 +1,5 @@
 ---
+# Es muss sudo mit "apt install sudo" installiert sein, und der User muss in der Sudo-Datei drin stehen! #
 - name: Installiere Wazuh für Debian (Indexer, Manager/Server und Dashboard).
   become: yes
   hosts: all
