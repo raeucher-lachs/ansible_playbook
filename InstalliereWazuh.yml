@@ -9,6 +9,11 @@
     config_yml_ip: "127.0.0.1"
     user_name: debian
   tasks:
+    - name: Prüfe auf Updates.
+      ansbile.builtin.apt:
+        update_cache: yes
+    -
+      ansible.builtin.shell: apt-get upgrade -y
     - name: Erstelle Verzeichnis {{ wazuh_dict_name }}.
       ansible.builtin.file:
         path: /home/{{ user_name }}/{{ wazuh_dict_name }}
