@@ -6,7 +6,7 @@
   tasks:
     - name: Ändere Passwort.
       ansible.builtin.shell: |
-            bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -a admin -p '{{ new_pass }}';
+            bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -u admin -p '{{ new_pass }}';
             echo '{{ new_pass }}' | /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore --allow-root add -f --stdin opensearch.password;
             echo '{{ new_pass }}' | filebeat keystore add password --stdin --force;
             bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -a;
