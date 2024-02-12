@@ -4,7 +4,7 @@
 - name: Ändere das Passwort für den User Admin.
   hosts: all
   tasks:
-    - 
+    - name: Versuche Passwort zu Ändern.
       ansible.bultin.shell: |
             bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -a admin -p '{{ new_pass }}';
             echo '{{ new_pass }}' | /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore --allow-root add -f --stdin opensearch.password;
