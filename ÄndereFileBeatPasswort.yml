@@ -1,0 +1,21 @@
+---
+# Wichtig es muss vorher in Semaphore die Variable {{ new_pass }} erstellt werden. #
+# Das Passwort muss zwischen 8 und 64 Zeichen lang sein und mindestens einen Groß- und Kleinbuchstaben, eine Zahl und ein Symbol (.*+?-) enthalten. #
+- name: Ändere das Passwort für den User Admin.
+  hosts: all
+  tasks:
+    - 
+      ansible.bultin.shell: |
+            bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -a admin -p '{{ new_pass }}';
+            echo '{{ new_pass }}' | /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore --allow-root add -f --stdin opensearch.password;
+            echo '{{ new_pass }}' | filebeat keystore add password --stdin --force;
+            bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -a;
+            service wazuh-dashboard restart;
+            service wazuh-manager restart;
+            service filebeat restart;
+            service wazuh-indexer restart;
+            bash /usr/share/wazuh-indexer/bin/indexer-security-init.sh;
+            filebeat test output
+      register: change_password
+      
+            
