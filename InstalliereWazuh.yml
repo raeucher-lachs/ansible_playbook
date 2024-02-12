@@ -4,7 +4,7 @@
 # Die Installation dauert ca. 20 Minuten #
 - name: Installiere Wazuh für Debian (Indexer, Manager/Server und Dashboard).
   become: yes
-  #hosts: all
+  hosts: all
   vars:
     wazuh_dict_name: wazuh
     config_yml_ip: "127.0.0.1"
