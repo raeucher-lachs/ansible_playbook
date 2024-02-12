@@ -13,7 +13,7 @@
     - name: Prüfe auf Updates.
       ansible.builtin.shell: |
             apt-get update;
-            apt-get upgrade
+            apt-get upgrade -y
     - name: Erstelle Verzeichnis {{ wazuh_dict_name }}.
       ansible.builtin.file:
         path: /home/{{ user_name }}/{{ wazuh_dict_name }}
