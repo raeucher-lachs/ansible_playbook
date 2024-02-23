@@ -10,11 +10,18 @@
             bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -u admin -p {{ new_pass }};
             echo {{ new_pass }} | /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore --allow-root add -f --stdin opensearch.password;
             echo {{ new_pass }} | filebeat keystore add password --stdin --force;
+            service filebeat restart;
             service wazuh-dashboard restart;
             service wazuh-manager restart;
-            service filebeat restart;
-            service wazuh-indexer restart;
-            bash /usr/share/wazuh-indexer/bin/indexer-security-init.sh;
-            filebeat test output
+            service wazuh-indexer restart
+    - name: Richte Filebeat ein.
+      ansible.builtin.shell: bash /usr/share/wazuh-indexer/bin/indexer-security-init.sh
+    - name: Zeige Filebeat Testausgabe.
+      ansible.builtin.shell: filebeat test output
+      register: filebeat
+      debug: var=filebeat
+      
+            
+
       
             
