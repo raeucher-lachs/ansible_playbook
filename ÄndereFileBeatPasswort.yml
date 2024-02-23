@@ -9,8 +9,11 @@
       ansible.builtin.shell: |
             bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/wazuh-passwords-tool.sh -u admin -p {{ new_pass }};
             echo {{ new_pass }} | /usr/share/wazuh-dashboard/bin/opensearch-dashboards-keystore --allow-root add -f --stdin opensearch.password;
-            echo {{ new_pass }} | filebeat keystore add password --stdin --force;
-            service filebeat restart;
+            echo {{ new_pass }} | filebeat keystore add password --stdin --force
+    - name: Starte Filebeat neu.
+       ansible.builtin.shell: service filebeat restart
+    - name: Starte Wazuh neu.
+      ansible.builtin.shell: |
             service wazuh-dashboard restart;
             service wazuh-manager restart;
             service wazuh-indexer restart
