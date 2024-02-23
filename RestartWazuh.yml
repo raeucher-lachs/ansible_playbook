@@ -1,0 +1,8 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Starte Wazuh neu.
+      ansible.builtin.shell: |
+            service wazuh-dashboard restart;
+            service wazuh-manager restart;
+            service wazuh-indexer restart
