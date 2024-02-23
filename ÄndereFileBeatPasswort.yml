@@ -1,6 +1,7 @@
 ---
 # Wichtig es muss vorher in Semaphore die Variable {{ new_pass }} erstellt werden. #
 # Das Passwort muss zwischen 8 und 64 Zeichen lang sein und mindestens einen Groß- und Kleinbuchstaben, eine Zahl und ein Symbol (.*+?-) enthalten. #
+# Nach der Änderung unbedingt die Cookies von Wazuh löschen #
 - hosts: all
   become: yes
   tasks:
