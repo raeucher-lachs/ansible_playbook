@@ -8,7 +8,7 @@
   vars:
     wazuh_dict_name: wazuh
     config_yml_ip: "127.0.0.1"
-    user_name: debian
+    user_name: homa
   tasks:
     - name: Prüfe auf Updates.
       ansible.builtin.shell: |
