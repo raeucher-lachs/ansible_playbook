@@ -119,7 +119,7 @@
             systemctl start wazuh-manager
     - name: Lade Standardkonfigurationsdatei für Filebear runter.
       ansible.builtin.shell: |
-            curl -so /etc/filebeat/filebeat.yml https://packages.wazuh.com/4.7/tpl/wazuh/filebeat/filebeat.yml &&
+      #curl -so /etc/filebeat/filebeat.yml https://packages.wazuh.com/4.7/tpl/wazuh/filebeat/filebeat.yml &&
             filebeat keystore create
     - name: Richte Benutzer und Passwort für Filebeat ein.
       ansible.builtin.shell: |
