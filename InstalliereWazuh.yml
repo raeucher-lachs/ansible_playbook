@@ -25,7 +25,7 @@
     - name: Lade mit curl wazuh-cert-tool.sh runter.
       ansible.builtin.shell: |
          cd /home/{{ user_name }}/{{ wazuh_dict_name }} &&
-         curl -sO https://packages.wazuh.com/4.7/wazuh-certs-tool.sh
+         curl -sO https://packages.wazuh.com/4.9/wazuh-certs-tool.sh
     - name: Erstelle config.yml.
       ansible.builtin.file:
         path: /home/{{ user_name }}/{{ wazuh_dict_name }}/config.yml
